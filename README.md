@@ -1,5 +1,5 @@
 <!-- file: README.md -->
-<!-- version: 1.0.0 -->
+<!-- version: 1.1.0 -->
 <!-- guid: 1c7e9a2b-4d6f-4813-9a2e-7b5c0d3e6f9a -->
 <!-- last-edited: 2026-07-14 -->
 
@@ -21,7 +21,7 @@ git-tracked file, pulls the header fields out of each, and writes:
 
 ```yaml
 - uses: actions/checkout@v4
-- uses: falkcorp/gha-guid-index@main
+- uses: falkcorp/gha-guid-index@v1
 ```
 
 Fails the step by default if the committed index is stale (`fail-on-drift:
@@ -49,7 +49,7 @@ human commit the regenerated files.
 ```yaml
 repos:
   - repo: https://github.com/falkcorp/gha-guid-index
-    rev: main
+    rev: v1
     hooks:
       - id: guid-index
 ```

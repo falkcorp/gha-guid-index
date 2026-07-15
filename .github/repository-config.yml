@@ -1,0 +1,8 @@
+# file: .github/repository-config.yml
+# Seeded by bootstrap-repo skill on 2026-07-15
+
+repository:
+  name: gha-guid-index
+  type: action
+  primary_language: auto
+  description: ''

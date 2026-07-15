@@ -1,0 +1,7 @@
+name: 'gha-guid-index'
+description: 'TODO: describe this action'
+runs:
+  using: 'composite'
+  steps:
+    - run: echo "TODO: implement gha-guid-index"
+      shell: bash

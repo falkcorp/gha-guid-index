@@ -1,7 +1,59 @@
-name: 'gha-guid-index'
-description: 'TODO: describe this action'
+# file: action.yml
+# version: 1.0.0
+# guid: 8b6a1f3d-2c9e-4a71-9f0d-5e2b7c4a1d38
+# last-edited: 2026-07-14
+
+name: 'GUID Index'
+description: 'Generate a title/path <-> GUID index from file version headers'
+author: 'falkcorp'
+branding:
+  icon: 'hash'
+  color: 'purple'
+
+inputs:
+  working-directory:
+    description: 'Root directory to scan for git-tracked files'
+    required: false
+    default: '.'
+  json-output:
+    description: 'Path (relative to working-directory) for the JSON index'
+    required: false
+    default: '.github/guid-index.json'
+  md-output:
+    description: 'Path (relative to working-directory) for the Markdown index'
+    required: false
+    default: 'docs/guid-index.md'
+  fail-on-drift:
+    description: 'Fail the step if the generated index differs from what is committed'
+    required: false
+    default: 'true'
+
+outputs:
+  duplicate-count:
+    description: 'Number of GUID values shared by more than one file'
+    value: ${{ steps.generate.outputs.duplicate-count }}
+  malformed-count:
+    description: 'Number of guid header values that are not valid UUIDs'
+    value: ${{ steps.generate.outputs.malformed-count }}
+
 runs:
   using: 'composite'
   steps:
-    - run: echo "TODO: implement gha-guid-index"
+    - id: generate
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        python3 "${{ github.action_path }}/generate_guid_index.py" \
+          --repo-root . \
+          --json-output "${{ inputs.json-output }}" \
+          --md-output "${{ inputs.md-output }}"
+
+    - id: drift-check
+      if: ${{ inputs.fail-on-drift == 'true' }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        if ! git diff --exit-code -- "${{ inputs.json-output }}" "${{ inputs.md-output }}"; then
+          echo "::error::GUID index is stale — run the generator and commit the result."
+          exit 1
+        fi

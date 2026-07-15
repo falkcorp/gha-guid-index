@@ -1,0 +1,12 @@
+# file: .pre-commit-hooks.yaml
+# version: 1.0.0
+# guid: 6e2d4a19-7c3f-4b6e-8a1d-9f5c2e0b3a7d
+# last-edited: 2026-07-14
+
+- id: guid-index
+  name: Regenerate GUID index
+  description: Keep .github/guid-index.json and docs/guid-index.md in sync with guid: headers
+  entry: generate_guid_index.py
+  language: script
+  pass_filenames: false
+  always_run: true
